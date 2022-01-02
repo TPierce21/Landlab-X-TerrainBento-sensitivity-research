@@ -23,7 +23,7 @@ params = {
     # Create the Grid
     "grid": {
         "RasterModelGrid": [
-            (500, 500),
+            (200, 320),
             {
                 "xy_spacing": 10
             },
@@ -50,10 +50,10 @@ params = {
     "fields":["topographic__elevation"],
 
     # Parameters that control process and rates.
-    "water_erodibility" : 0.001,
+    "water_erodibility" : 0.01,
     "m_sp" : 0.5,
     "n_sp" : 1.0,
-    "regolith_transport_parameter" : 0.02,           
+    "regolith_transport_parameter" : 0.2,           
          }
 
 model = Basic.from_dict(params)
