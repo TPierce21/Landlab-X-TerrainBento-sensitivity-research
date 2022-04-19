@@ -1,0 +1,26 @@
+# TerrainBento code ---basicDd---
+
+from landlab import RasterModelGrid
+
+mg=RasterModelGrid((925,902),0.0005)
+# mg.set_closed_boundaries_at_grid_edges(True, False, True, False)
+
+from landlab.io import read_esri_ascii
+(mg, z) = read_esri_ascii('dem46.txt', name="topographic__elevation")
+
+from terrainbento import Clock, BasicDd
+clock = Clock(start=0, stop=100, step=0.1)
+model = BasicDd(clock, 
+                mg,
+                m_sp=0.5,
+                n_sp=1,
+                water_erodibility=0.00000005,        
+                regolith_transport_parameter=0.00005,
+                water_erosion_rule__threshold=0.000005,
+                water_erosion_rule__thresh_depth_derivative=0.0)
+                # output_interval=6250)
+
+#model.run_one_step(100)
+#mg.save('BasicDdAttempt46to71.nc')
+
+model.run()
