@@ -1,0 +1,39 @@
+% dem46=(dem46)*1000;      %converting elevations from m to mm
+% dem71=(dem71)*1000;      %make sure to check the DEMs maybe have 
+% dem110=(dem110)*1000;    %to import them new before each run   
+
+figure(1)
+imagesc(dem46)
+grid on
+% mesh(dem46)
+% zlim([0 200])
+% xlim([0 999])
+% ylim([0 999])
+title('DEM 46', 'FontSize', 14)
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+caxis([0 90]);
+
+figure(2)
+imagesc(dem71)
+grid on
+% mesh(dem71)
+% zlim([0 200])
+% xlim([0 999])
+% ylim([0 999])
+title('DEM 71', 'FontSize', 14)
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+caxis([0 90]);
+
+figure(3)
+imagesc(dem110)
+grid on
+% mesh(dem110)
+% zlim([0 200])
+% xlim([0 999])
+% ylim([0 999])
+title('DEM 110', 'FontSize', 14)
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+caxis([0 90]);
