@@ -1,0 +1,23 @@
+Z=ncread("BasicAttempt.nc",'topographic__elevation');
+Z=(Z')*1000;     %just double check the units this converts m to mm
+Z=flip(Z);       %this flips the DEM so it matches Singh
+
+V=ncread("BasicAttempt.nc",'topographic__elevation');
+V=(V')*1000;
+V=flip(V);
+
+figure(1)
+imagesc(Z)
+title('name of DEM output')
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+caxis([0 100]);
+grid on
+
+figure(2)
+mesh(Z)
+title('name of DEM output')
+zlim([0 150])
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+caxis([0 100]);
