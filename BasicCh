@@ -1,0 +1,26 @@
+
+
+from landlab import RasterModelGrid
+
+mg=RasterModelGrid((925,902),0.0005)
+# mg.set_closed_boundaries_at_grid_edges(True, False, True, False)
+
+from landlab.io import read_esri_ascii
+(mg, z) = read_esri_ascii('dem46.txt', name="topographic__elevation")
+
+from terrainbento import Clock, BasicCh
+clock = Clock(start=0, stop=100, step=0.1)
+model = BasicCh(clock, 
+                mg,
+                m_sp=0.5,
+                n_sp=1,
+                water_erodibility=0.000005,        
+                regolith_transport_parameter=0.0005,
+                critical_slope=0.3,
+                number_of_taylor_terms=11) 
+                # output_interval=10000)
+
+# model.run_one_step(100)
+# mg.save('BasicChAttempt46to71.nc')
+
+model.run()
