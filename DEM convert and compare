@@ -1,0 +1,28 @@
+Z=ncread("terrainbento_output0000.nc",'topographic__elevation');
+Z=(Z')*1000;                        %just double check the units this converts m to mm
+Z=flip(Z);
+
+% dem71=(dem71)*1000;                  %to put the appropriate DEM in mm 
+
+figure (1)
+imagesc(dem46)                       %change this to appropriate DEM
+title('Singhs DEM @ time ?')
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+caxis([0 80]);
+grid on
+
+figure (2)
+imagesc(Z)
+title('Landlabs DEM @ time ?')     %change this to appropriate DEM
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+caxis([0 80]);
+grid on
+
+figure (3)
+imagesc(dem46-Z)                     %change this to appropriate DEM
+title('Singh-Landlab @ time ?')
+hcb=colorbar;
+hcb.Title.String="Elevation in mm";
+grid on
