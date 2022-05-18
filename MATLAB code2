@@ -1,1 +1,41 @@
 
+DEM=GRIDobj('dem71.txt');
+DEM.Z=DEM.Z./1000;
+
+DEMf = fillsinks(DEM);
+
+FD = FLOWobj(DEMf,'preprocess','carve');
+
+DEM = imposemin(FD,DEM);
+FDinf = FLOWobj(DEM,'dinf');
+
+A = flowacc(FDinf);
+S = STREAMobj(FD,flowacc(FDinf)>100);
+S = removeshortstreams(S,0.002);
+so = streamorder(S);
+
+nrc = numel(S.x);
+M = sparse(double(S.ix),double(S.ixc),true,nrc,nrc);
+M = M | M' | speye(nrc);
+[~,p,~,r] = dmperm(M);
+nc = length(r) - 1;
+% label matrix
+L = zeros(nrc,1);
+% sort to find the largest conncompoments
+[~,dd] = sort(diff(r),'descend');
+for tt = dd(1:length(dd))
+    L(p(r(tt):r(tt+1)-1)) = tt;
+end
+for loop1=1:length(dd)
+    temp=find(L==loop1);
+    lengths(loop1,1)=length(temp);
+    orders(loop1,1)=max(so(temp));
+end
+
+for loop1=1:max(orders)
+    temp=find(orders==loop1);
+    lengthvals(loop1)=length(lengths(temp));
+end
+
+% figure
+% semilogy(lengthvals(1:length(lengthvals)-1),'-ok')
