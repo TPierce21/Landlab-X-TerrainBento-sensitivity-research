@@ -1,0 +1,72 @@
+
+% Plotting of the stream orders for the dem71 and then change the term
+% to each of the models and copy the outputs into log10(y) vector
+% 
+% addpath(genpath('/Users/test/Downloads/topotoolbox-2.3'))
+
+DEM = GRIDobj('BasicCh71.txt');
+DEM.Z=DEM.Z./1000;
+DEMf = fillsinks(DEM);
+FD = FLOWobj(DEMf,'preprocess','carve');
+S = streamorder(FD,flowacc(FD)>100);
+
+DCh1 = drainagebasins(FD,S,1);
+figure(1)
+imageschs(DEM,DCh1)
+set(gca,'XTick',[], 'YTick', [])
+hcb=colorbar;
+hcb.Title.String="Number of Basins";
+hcb.Title.FontSize=14;
+DCh1max=max(max(DCh1(:)));
+DCh1vec=DCh1.Z(:);
+DCh1vec=double(DCh1vec);
+
+DCh2 = drainagebasins(FD,S,2);
+figure(2)
+imageschs(DEM,DCh2)
+set(gca,'XTick',[], 'YTick', [])
+hcb=colorbar;
+hcb.Title.String="Number of Basins";
+hcb.Title.FontSize=14;
+DCh2max=max(max(DCh2(:)));
+DCh2vec=DCh2.Z(:);
+DCh2vec=double(DCh2vec);
+
+DCh3 = drainagebasins(FD,S,3);
+figure(3)
+imageschs(DEM,DCh3)
+set(gca,'XTick',[], 'YTick', [])
+hcb=colorbar;
+hcb.Title.String="Number of Basins";
+hcb.Title.FontSize=14;
+DCh3max=max(max(DCh3(:)));
+DCh3vec=DCh3.Z(:);
+DCh3vec=double(DCh3vec);
+
+DCh4 = drainagebasins(FD,S,4);
+figure(4)
+imageschs(DEM,DCh4)
+set(gca,'XTick',[], 'YTick', [])
+hcb=colorbar;
+hcb.Title.String="Number of Basins";
+hcb.Title.FontSize=14;
+DCh4max=max(max(DCh4(:)));
+DCh4vec=DCh4.Z(:);
+DCh4vec=double(DCh4vec);
+% 
+figure(5)
+DChav=((DB1+DB2+DB3+DB4)/4);
+DChavvec=DChav.Z(:);
+DChavvec=double(DChavvec);
+imagesc(DChav)
+set(gca,'XTick',[], 'YTick', [])
+
+% --- plotting the gradient of the max total bains 
+% --- repeat for all of the models and then plot the gradients
+% xSingh = [1 2 3 4];
+% ySingh = [log10(max(max(D1vec))) log10(max(max(D2vec))) log10(max(max(D3vec))) log10(max(max(D4ec)))];
+% pSingh = polyfit(xSingh,ySingh,1);
+% fSingh = polyval(pSingh,xSingh); 
+% figure(5)
+% plot(xSingh,ySingh,'o',x,fSingh,'-') 
+% legend('data','linear fit')
