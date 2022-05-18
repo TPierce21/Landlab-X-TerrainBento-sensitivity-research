@@ -1,0 +1,65 @@
+    DEM = GRIDobj('BasicCh71.txt');
+    FD = FLOWobj(DEM);
+    SCh = STREAMobj(FD,'minarea',1000);
+    SCh = klargestconncomps(SCh,32);
+    dCh = distance(SCh,'mean_from_ch');
+    dCh = dCh*1000;
+    
+    plotc(SCh,dCh)
+    h = colorbar;
+    caxis([0 230]);
+    h.Label.String = 'Max. distance from channelhead [mm]'; 
+    h.Label.FontSize = 14;
+    set(gca,'XTick',[], 'YTick', [])
+
+
+% DEM = GRIDobj('Basic71.txt');
+% FD = FLOWobj(DEM,'preprocess','c');
+% S  = STREAMobj(FD,A>1000);
+% S  = klargestconncomps(trunk(S));
+% g  = gradient(S,DEM,'method','robust');
+% subplot(2,1,1); plotdz(S,DEM);
+% subplot(2,1,2); plotdz(S,g); ylabel('Gradient [-]')
+
+
+DEM = GRIDobj('dem71.txt');
+% DEM.Z=DEM.Z./1000;
+FD = FLOWobj(DEM,'preprocess','carve');
+S  = STREAMobj(FD,'minarea',1000);
+S  = klargestconncomps(S,1);
+ix = streampoi(S,'outlets','ix');
+[xout,yout] = ind2coord(DEM,ix);
+DB  = drainagebasins(FD,ix);
+DB  = DB>0;
+% Create a logical seed grid
+SEED = GRIDobj(DEM,'logical');
+SEED.Z(ix) = true;
+% and an empty grid to which we'll write the output of bwdist
+D    = GRIDobj(DEM);
+% D.Z  = bwdist(SEED.Z,'euclidean') * DEM.cellsize;
+%  
+% maxd = max(D.Z(DB.Z(:)));
+% LOCS = D==maxd & DB;
+% IX   = find(LOCS.Z);
+% [x,y] = ind2coord(DEM,IX);
+%  
+% figure(4)
+% imageschs(DEM,DB);
+% hold on
+% plot([repmat(xout,size(x)) x]',[repmat(yout,size(y)) y]','k');
+% hold off
+
+D.Z = bwdistgeodesic(DB.Z>0,SEED.Z,'q') * DEM.cellsize;
+maxd = max(D.Z(DB.Z(:)));
+LOCS = D==maxd & DB;
+IX   = find(LOCS.Z);
+[x,y] = ind2coord(DEM,IX);
+figure(1)
+imageschs(DEM,D*1000);
+hold on
+plot([repmat(xout,size(x)) x]',[repmat(yout,size(y)) y]','k')
+hold off
+
+% D = flowdistance(FD,'downstream');
+% D = dilate(D,ones(5));
+% imageschs(DEM,D);
